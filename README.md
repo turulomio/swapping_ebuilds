@@ -26,7 +26,6 @@ swapping_ebuilds --get # To detect swapping
 swapping_ebuilds --analyze # To see a swapping report
 ```
 
-
 ## Linux installation
 
 You can find the ebuild in https://github.com/turulomio/myportage/tree/master/app-admin/swapping_ebuilds
