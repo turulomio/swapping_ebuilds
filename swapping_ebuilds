@@ -7,6 +7,10 @@ from humanize import filesize
 from psutil import swap_memory, process_iter
 from time import sleep
 
+__version__="0.1.0"
+__versiondatetime__=datetime(2020,12,13,17,44)
+__versiondate__=__versiondatetime__.date()
+
 
 class SetPackages:
     """
@@ -100,12 +104,10 @@ class Report:
         return "{} {} {}".format(self.datetime,self.name,self.swap)
 ####################################################################################################
 
-version_date=date(2018,2,8)
-version_string=str(version_date).replace("-","")
 description="This app logs in /var/lib/swapping_ebuilds.txt when compiling gentoo packages and swap is over an amount of MB. This allow you to change in package.env the number of processors used, to decrease swapping and improve ebuild time compilation"
-epilog="Developed by Mariano Muñoz 2017-{}".format(version_date.year)
+epilog="Developed by Mariano Muñoz 2017-{}".format(__versiondate__.year)
 parser=argparse.ArgumentParser(description=description,epilog=epilog)
-parser.add_argument('--version',action='version', version=version_string)
+parser.add_argument('--version',action='version', version=__version__)
 group1=parser.add_mutually_exclusive_group(required=True)
 group1.add_argument('--analyze', help='Analyze log', action='store_true', default=False)
 group1.add_argument('--get', help='Generate log', action='store_true',default=False)
@@ -133,7 +135,7 @@ if args.get:
 
         used=swap_memory().used
 
-        s="{} {} {}".format(datetime.now(), package, filesize.naturalsize(10000000))
+        s="{} {} {}".format(datetime.now(), package, filesize.naturalsize(used))
 
         if used>args.megabytes*1024*1024:
             f=open(filename,"a")
@@ -146,7 +148,7 @@ if args.get:
 
 if args.analyze:
     if path.exists(filename)==False:
-        print("Use swapping_ebuilds --get, first to collect data")
+        print("No swapping detected")
         sys.exit(0)
     set=SetPackages()
     set.print()
