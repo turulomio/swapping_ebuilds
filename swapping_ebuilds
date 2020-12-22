@@ -7,15 +7,12 @@ from humanize import filesize
 from psutil import swap_memory, process_iter
 from time import sleep
 
-__version__="0.1.0"
+__version__="0.1.0.dev"
 __versiondatetime__=datetime(2020,12,13,17,44)
 __versiondate__=__versiondatetime__.date()
 
 
 class SetPackages:
-    """
-       Group of SetPackages
-    """
     def __init__(self):
         self.arr=[]
         self.read_file()
@@ -134,16 +131,11 @@ if args.get:
             pass
 
         used=swap_memory().used
-
-        s="{} {} {}".format(datetime.now(), package, filesize.naturalsize(used))
-
         if used>args.megabytes*1024*1024:
             f=open(filename,"a")
-            f.write(s+"\n")
+            f.write(f"{datetime.now()} {package} {used}\n")
             f.close()
-            print (s, "Logging...")
-        else:
-            print (s)
+        print (f"{datetime.now()} {package} {filesize.naturalsize(used)} Logging...")
         sleep(60)
 
 if args.analyze:
