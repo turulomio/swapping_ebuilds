@@ -8,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-31 08:13+0100\n"
+"POT-Creation-Date: 2020-12-31 08:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "New Release:"
@@ -36,4 +36,32 @@ msgid "  * Upload to portage repository"
 msgstr ""
 
 msgid "Uninstall command only works in Linux"
+msgstr ""
+
+msgid "{} ({}) [{}] has {} reports ({} per hour) with {} of swap average"
+msgstr ""
+
+#, python-brace-format
+msgid "Problem parsing: {line}"
+msgstr ""
+
+msgid "This app logs in /var/lib/swapping_ebuilds.txt when compiling gentoo packages and swap is over an amount of MB. This allow you to change in package.env the number of processors used, to decrease swapping and improve ebuild time compilation"
+msgstr ""
+
+msgid "Developed by Mariano Muñoz 2017-{}"
+msgstr ""
+
+msgid "Analyze log"
+msgstr ""
+
+msgid "Generate log"
+msgstr ""
+
+msgid "Minimum megabytes swap amount to be logged. Default is 500MB"
+msgstr ""
+
+msgid "Please add a int to the megabytes argument"
+msgstr ""
+
+msgid "No swapping detected"
 msgstr ""

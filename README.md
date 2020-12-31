@@ -38,6 +38,10 @@ You can find the ebuild in https://github.com/turulomio/myportage/tree/master/ap
 
 ## Changelog
 
+### 0.2.0 (2020-12-31)
+
+* Script converted to a python package
+
 ### 0.1.0 (2020-12-13)
 
 * Script migrated to this project from myportage repository

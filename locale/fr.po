@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RecPermissions\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-31 08:11+0100\n"
+"POT-Creation-Date: 2020-12-31 08:28+0100\n"
 "PO-Revision-Date: 2018-11-03 07:11+0100\n"
 "Last-Translator: root <turulomio@yahoo.es>\n"
 "Language-Team: French\n"
@@ -37,6 +37,34 @@ msgstr " * Uploader au dépôt de portage"
 
 msgid "Uninstall command only works in Linux"
 msgstr "La commande 'désinstaller' marche seulement sur Linux"
+
+msgid "{} ({}) [{}] has {} reports ({} per hour) with {} of swap average"
+msgstr ""
+
+#, python-brace-format
+msgid "Problem parsing: {line}"
+msgstr ""
+
+msgid "This app logs in /var/lib/swapping_ebuilds.txt when compiling gentoo packages and swap is over an amount of MB. This allow you to change in package.env the number of processors used, to decrease swapping and improve ebuild time compilation"
+msgstr ""
+
+msgid "Developed by Mariano Muñoz 2017-{}"
+msgstr ""
+
+msgid "Analyze log"
+msgstr ""
+
+msgid "Generate log"
+msgstr ""
+
+msgid "Minimum megabytes swap amount to be logged. Default is 500MB"
+msgstr ""
+
+msgid "Please add a int to the megabytes argument"
+msgstr ""
+
+msgid "No swapping detected"
+msgstr ""
 
 #~ msgid "DESCRIPTION"
 #~ msgstr "LA DESCRIPTION"

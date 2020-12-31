@@ -3,13 +3,18 @@ import argparse
 import sys
 from os import path
 from datetime import datetime, timedelta, date
+from gettext import translation
 from humanize import filesize
+from pkg_resources import resource_filename
 from psutil import swap_memory, process_iter
 from time import sleep
+from swapping_ebuilds.__init__ import __version__, __versiondate__
 
-__version__="0.1.0.dev"
-__versiondatetime__=datetime(2020,12,13,17,44)
-__versiondate__=__versiondatetime__.date()
+try:
+    t=translation('swapping_ebuilds', resource_filename("swapping_ebuilds","locale"))
+    _=t.gettext
+except:
+    _=str
 
 
 class SetPackages:
@@ -43,7 +48,7 @@ class SetPackages:
 
     def print(self):
         for p in self.arr:
-            print ("{} ({}) [{}] has {} reports ({} per hour) with {} of swap average".format(p.datetime(), p.duration(),p.name(),p.num_reports(), int(p.reports_per_hour()),filesize.naturalsize(int(p.average_swap()))))
+            print (_("{} ({}) [{}] has {} reports ({} per hour) with {} of swap average").format(p.datetime(), p.duration(),p.name(),p.num_reports(), int(p.reports_per_hour()),filesize.naturalsize(int(p.average_swap()))))
 
 
 class Package:
@@ -94,53 +99,55 @@ class Report:
             self.swap=int(line.split(" [")[1].split("] ")[1])
             return self
         except:
-            print("Problem parsing: {}".format(line))
+            print(_(f"Problem parsing: {line}"))
             return None
 
     def __repr__(self):
         return "{} {} {}".format(self.datetime,self.name,self.swap)
 ####################################################################################################
 
-description="This app logs in /var/lib/swapping_ebuilds.txt when compiling gentoo packages and swap is over an amount of MB. This allow you to change in package.env the number of processors used, to decrease swapping and improve ebuild time compilation"
-epilog="Developed by Mariano Muñoz 2017-{}".format(__versiondate__.year)
-parser=argparse.ArgumentParser(description=description,epilog=epilog)
-parser.add_argument('--version',action='version', version=__version__)
-group1=parser.add_mutually_exclusive_group(required=True)
-group1.add_argument('--analyze', help='Analyze log', action='store_true', default=False)
-group1.add_argument('--get', help='Generate log', action='store_true',default=False)
-parser.add_argument('--megabytes', help='Minimum megabytes swap amount to be logged. Default is 500MB', action='store', default=500,metavar="MB")
-args=parser.parse_args()
 
-try:
-    args.megabytes=int(args.megabytes)
-except:
-    print("Please add a int to the megabytes argument")
-    sys.exit(0)
+def main():
+    description=_("This app logs in /var/lib/swapping_ebuilds.txt when compiling gentoo packages and swap is over an amount of MB. This allow you to change in package.env the number of processors used, to decrease swapping and improve ebuild time compilation")
+    epilog=_("Developed by Mariano Muñoz 2017-{}").format(__versiondate__.year)
+    parser=argparse.ArgumentParser(description=description,epilog=epilog)
+    parser.add_argument('--version',action='version', version=__version__)
+    group1=parser.add_mutually_exclusive_group(required=True)
+    group1.add_argument('--analyze', help=_('Analyze log'), action='store_true', default=False)
+    group1.add_argument('--get', help=_('Generate log'), action='store_true',default=False)
+    parser.add_argument('--megabytes', help=_('Minimum megabytes swap amount to be logged. Default is 500MB'), action='store', default=500,metavar="MB")
+    args=parser.parse_args()
 
-filename="/var/lib/swapping_ebuilds.txt"
-
-if args.get:
-    while True:
-        package=""
-        try:
-            for proc in process_iter():
-                for word in proc.cmdline():
-                    if word.endswith("] sandbox"):
-                        package=word.replace(" sandbox","")
-        except:
-            pass
-
-        used=swap_memory().used
-        if used>args.megabytes*1024*1024:
-            f=open(filename,"a")
-            f.write(f"{datetime.now()} {package} {used}\n")
-            f.close()
-        print (f"{datetime.now()} {package} {filesize.naturalsize(used)} Logging...")
-        sleep(60)
-
-if args.analyze:
-    if path.exists(filename)==False:
-        print("No swapping detected")
+    try:
+        args.megabytes=int(args.megabytes)
+    except:
+        print(_("Please add a int to the megabytes argument"))
         sys.exit(0)
-    set=SetPackages()
-    set.print()
+
+    filename="/var/lib/swapping_ebuilds.txt"
+
+    if args.get:
+        while True:
+            package=""
+            try:
+                for proc in process_iter():
+                    for word in proc.cmdline():
+                        if word.endswith("] sandbox"):
+                            package=word.replace(" sandbox","")
+            except:
+                pass
+
+            used=swap_memory().used
+            if used>args.megabytes*1024*1024:
+                f=open(filename,"a")
+                f.write(f"{datetime.now()} {package} {used}\n")
+                f.close()
+            print (f"{datetime.now()} {package} {filesize.naturalsize(used)} Logging...")
+            sleep(60)
+
+    if args.analyze:
+        if path.exists(filename)==False:
+            print(_("No swapping detected"))
+            sys.exit(0)
+        set=SetPackages()
+        set.print()
