@@ -20,7 +20,7 @@ except:
 
 
 def signal_handler(signal, frame):
-    print("You pressed 'Ctrl+C', exiting...")
+    print(_("You pressed 'Ctrl+C', exiting..."))
     exit(1)
 
 

@@ -38,6 +38,11 @@ You can find the ebuild in https://github.com/turulomio/myportage/tree/master/ap
 
 ## Changelog
 
+### 0.3.0 (2021-02-21)
+
+* Improved Logging output.
+* Captured CTRL+C keys.
+
 ### 0.2.0 (2020-12-31)
 
 * Script converted to a python package

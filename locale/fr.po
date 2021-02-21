@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RecPermissions\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-12-31 08:28+0100\n"
+"POT-Creation-Date: 2021-02-21 19:19+0100\n"
 "PO-Revision-Date: 2018-11-03 07:11+0100\n"
 "Last-Translator: root <turulomio@yahoo.es>\n"
 "Language-Team: French\n"
@@ -37,6 +37,9 @@ msgstr " * Uploader au dépôt de portage"
 
 msgid "Uninstall command only works in Linux"
 msgstr "La commande 'désinstaller' marche seulement sur Linux"
+
+msgid "You pressed 'Ctrl+C', exiting..."
+msgstr ""
 
 msgid "{} ({}) [{}] has {} reports ({} per hour) with {} of swap average"
 msgstr ""
