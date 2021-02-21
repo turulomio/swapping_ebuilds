@@ -7,6 +7,7 @@ from gettext import translation
 from humanize import filesize
 from pkg_resources import resource_filename
 from psutil import swap_memory, process_iter
+from signal import signal, SIGINT
 from time import sleep
 from swapping_ebuilds.__init__ import __version__, __versiondate__
 
@@ -15,6 +16,13 @@ try:
     _=t.gettext
 except:
     _=str
+
+
+
+def signal_handler(signal, frame):
+    print("You pressed 'Ctrl+C', exiting...")
+    exit(1)
+
 
 
 class SetPackages:
@@ -108,6 +116,8 @@ class Report:
 
 
 def main():
+    signal(SIGINT, signal_handler)
+
     description=_("This app logs in /var/lib/swapping_ebuilds.txt when compiling gentoo packages and swap is over an amount of MB. This allow you to change in package.env the number of processors used, to decrease swapping and improve ebuild time compilation")
     epilog=_("Developed by Mariano Muñoz 2017-{}").format(__versiondate__.year)
     parser=argparse.ArgumentParser(description=description,epilog=epilog)
@@ -142,7 +152,9 @@ def main():
                 f=open(filename,"a")
                 f.write(f"{datetime.now()} {package} {used}\n")
                 f.close()
-            print (f"{datetime.now()} {package} {filesize.naturalsize(used)} Logging...")
+                print (f"{datetime.now()} {package} {filesize.naturalsize(used)} Logging...")
+            else:
+                print (f"{datetime.now()} {package} {filesize.naturalsize(used)}")
             sleep(60)
 
     if args.analyze:
