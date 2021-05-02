@@ -41,6 +41,7 @@ You can find the ebuild in https://github.com/turulomio/myportage/tree/master/ap
 ### 0.4.0 (2021-05-02)
 
 * Changed system to swap variation instead of a limit of swap to log
+* Added --clean parameter to clean log
 
 ### 0.3.0 (2021-02-21)
 
