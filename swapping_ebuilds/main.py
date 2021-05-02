@@ -16,13 +16,9 @@ try:
 except:
     _=str
 
-
-
 def signal_handler(signal, frame):
     print(_("You pressed 'Ctrl+C', exiting..."))
     exit(1)
-
-
 
 class SetPackages:
     def __init__(self):
@@ -55,8 +51,7 @@ class SetPackages:
 
     def print(self):
         for p in self.arr:
-            print (_("{} ({}) [{}] has {} reports ({} per hour) with {} of swap average").format(p.datetime(), p.duration(),p.name(),p.num_reports(), int(p.reports_per_hour()),filesize.naturalsize(int(p.average_swap()))))
-
+            print (_("{} [{}] has {} reports with {} of swap variation and {} of swap average. They took {}").format(p.datetime(), p.name(), int(p.num_reports()), filesize.naturalsize(int(p.average_diff())), filesize.naturalsize(int(p.average_swap())), p.duration()))
 
 class Package:
     """
@@ -69,6 +64,13 @@ class Package:
         sum=0
         for r in self.arr:
             sum=sum+r.swap
+        return sum/self.num_reports()
+
+    # Variation in abs value
+    def average_diff(self):
+        sum=0
+        for r in self.arr:
+            sum=sum+abs(r.diff)
         return sum/self.num_reports()
 
     def num_reports(self):
@@ -84,8 +86,10 @@ class Package:
            Returns datetime of the first Result
         """
         return self.arr[0].datetime
+
     def name(self):
         return self.arr[0].name
+
     def reports_per_hour(self):
         return self.num_reports()/self.duration().total_seconds()*60*60
 
@@ -94,6 +98,7 @@ class Report:
         self.datetime=None
         self.name=None
         self.swap=0
+        self.diff=0
 
     def init__from_line(self,line):
         try:
@@ -103,21 +108,22 @@ class Report:
             str_datetime=line.split(" [")[0]
             self.datetime=datetime.strptime(str_datetime, "%Y-%m-%d %H:%M:%S.%f")
             self.name=line.split(" [")[1].split("] ")[0]
-            self.swap=int(line.split(" [")[1].split("] ")[1])
+            listIntegers=line.split(" [")[1].split("] ")[1].split(" ")
+            self.swap=int(listIntegers[0])
+            self.diff=int(listIntegers[1])
             return self
         except:
             print(_(f"Problem parsing: {line}"))
             return None
 
     def __repr__(self):
-        return "{} {} {}".format(self.datetime,self.name,self.swap)
+        return f"{self.datetime} {self.name} {self.swap} {self.diff}"
 ####################################################################################################
-
 
 def main():
     signal(SIGINT, signal_handler)
 
-    description=_("This app logs in /var/lib/swapping_ebuilds.txt when compiling gentoo packages and swap is over an amount of MB. This allow you to change in package.env the number of processors used, to decrease swapping and improve ebuild time compilation")
+    description=_("This app logs swap information in /var/lib/swapping_ebuilds.txt compiling gentoo packages. This allow you to change in package.env the number of processors used, to decrease swapping and improve ebuild time compilation")
     epilog=_("Developed by Mariano Muñoz 2017-{}").format(__versiondate__.year)
     parser=argparse.ArgumentParser(description=description,epilog=epilog)
     parser.add_argument('--version',action='version', version=__version__)
@@ -125,22 +131,20 @@ def main():
     group1.add_argument('--analyze', help=_('Analyze log'), action='store_true', default=False)
     group1.add_argument('--get', help=_('Generate log'), action='store_true',default=False)
     group1.add_argument('--clean', help=_('Clean log'), action='store_true',default=False)
-    parser.add_argument('--megabytes', help=_('Minimum megabytes swap amount to be logged. Default is 500MB'), action='store', default=500,metavar="MB")
+    parser.add_argument('--interval', help=_('Seconds between medition. Default is 10'), action='store', type=int, default=10, metavar="seconds")
     args=parser.parse_args()
-
-    try:
-        args.megabytes=int(args.megabytes)
-    except:
-        print(_("Please add a int to the megabytes argument"))
-        sys.exit(0)
 
     filename="/var/lib/swapping_ebuilds.txt"
 
     if args.clean:
-        os.remove(filename)
+        if path.exists(filename):
+            remove(filename)
+            print(_("Log cleaned"))
+        else:
+            print(_("Log already clenaned"))
         sys.exit(0)
 
-    last_swap=0
+    last_swap=swap_memory().used
     if args.get:
         while True:
             package=""
@@ -151,21 +155,21 @@ def main():
                             package=word.replace(" sandbox","")
             except:
                 pass
-
             used=swap_memory().used
             diff=used-last_swap
-            if diff>0:
-                if package=="":
-                    print (f_("{datetime.now()} Ebuild hasn't been detected {filesize.naturalsize(used)}  (Diff: {diff})"))
-                else:
-                    f=open(filename,"a")
-                    f.write(f"{datetime.now()} {package} {used}\n")
-                    f.close()
-                    print (f"{datetime.now()} {package} {filesize.naturalsize(used)} (Diff: {diff}) Logging...")
+
+            if package=="":
+                print (_(f"{datetime.now()} Ebuild hasn't been detected. Swap: {filesize.naturalsize(used)} (Variation: {filesize.naturalsize(diff)})"))
             else:
-                print (f"{datetime.now()} {package} {filesize.naturalsize(used)} (Diff: {diff})")
+                if diff!=0:
+                    f=open(filename,"a")
+                    f.write(f"{datetime.now()} {package} {used} {diff}\n")
+                    f.close()
+                    print (f"{datetime.now()} {package}. Swap: {filesize.naturalsize(used)} (Variation: {filesize.naturalsize(diff)}) Logging...")
+                else:
+                    print (f"{datetime.now()} {package}. Swap: {filesize.naturalsize(used)} (Variation: {filesize.naturalsize(diff)})")
             last_swap=used
-            sleep(60)
+            sleep(args.interval)
         sys.exit(0)
 
     if args.analyze:
