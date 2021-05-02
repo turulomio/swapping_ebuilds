@@ -1,7 +1,6 @@
-#!/usr/bin/python3
 import argparse
 import sys
-from os import path
+from os import path, remove
 from datetime import datetime, timedelta, date
 from gettext import translation
 from humanize import filesize
@@ -125,6 +124,7 @@ def main():
     group1=parser.add_mutually_exclusive_group(required=True)
     group1.add_argument('--analyze', help=_('Analyze log'), action='store_true', default=False)
     group1.add_argument('--get', help=_('Generate log'), action='store_true',default=False)
+    group1.add_argument('--clean', help=_('Clean log'), action='store_true',default=False)
     parser.add_argument('--megabytes', help=_('Minimum megabytes swap amount to be logged. Default is 500MB'), action='store', default=500,metavar="MB")
     args=parser.parse_args()
 
@@ -136,6 +136,11 @@ def main():
 
     filename="/var/lib/swapping_ebuilds.txt"
 
+    if args.clean:
+        os.remove(filename)
+        sys.exit(0)
+
+    last_swap=0
     if args.get:
         while True:
             package=""
@@ -148,14 +153,20 @@ def main():
                 pass
 
             used=swap_memory().used
-            if used>args.megabytes*1024*1024:
-                f=open(filename,"a")
-                f.write(f"{datetime.now()} {package} {used}\n")
-                f.close()
-                print (f"{datetime.now()} {package} {filesize.naturalsize(used)} Logging...")
+            diff=used-last_swap
+            if diff>0:
+                if package=="":
+                    print (f_("{datetime.now()} Ebuild hasn't been detected {filesize.naturalsize(used)}  (Diff: {diff})"))
+                else:
+                    f=open(filename,"a")
+                    f.write(f"{datetime.now()} {package} {used}\n")
+                    f.close()
+                    print (f"{datetime.now()} {package} {filesize.naturalsize(used)} (Diff: {diff}) Logging...")
             else:
-                print (f"{datetime.now()} {package} {filesize.naturalsize(used)}")
+                print (f"{datetime.now()} {package} {filesize.naturalsize(used)} (Diff: {diff})")
+            last_swap=used
             sleep(60)
+        sys.exit(0)
 
     if args.analyze:
         if path.exists(filename)==False:
@@ -163,3 +174,4 @@ def main():
             sys.exit(0)
         set=SetPackages()
         set.print()
+        sys.exit(0)
