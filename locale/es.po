@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RecPermissions\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-21 19:19+0100\n"
+"POT-Creation-Date: 2021-05-02 06:39+0200\n"
 "PO-Revision-Date: 2018-10-22 18:51+0100\n"
 "Last-Translator: root <turulomio@yahoo.es>\n"
 "Language-Team: Spanish\n"
@@ -42,15 +42,15 @@ msgstr "El comando 'uninstall' solo funciona en Linux"
 msgid "You pressed 'Ctrl+C', exiting..."
 msgstr "Se ha pulsado 'Ctrl+C', saliendo..."
 
-msgid "{} ({}) [{}] has {} reports ({} per hour) with {} of swap average"
-msgstr ""
+msgid "{} [{}] has {} reports with {} of swap variation and {} of swap average. They took {}"
+msgstr "{} [{}] tiene {} registros con {} de variación de swap y {} de media de swap. Tardaron {}"
 
 #, python-brace-format
 msgid "Problem parsing: {line}"
 msgstr "Problema al parsear: {line}"
 
-msgid "This app logs in /var/lib/swapping_ebuilds.txt when compiling gentoo packages and swap is over an amount of MB. This allow you to change in package.env the number of processors used, to decrease swapping and improve ebuild time compilation"
-msgstr ""
+msgid "This app logs swap information in /var/lib/swapping_ebuilds.txt compiling Gentoo packages. This allow you to change in package.env the number of processors used, to decrease swapping and improve ebuild time compilation"
+msgstr "Esta aplicación registra información de la swap en /var/lib/swapping_ebuilds.txt al compilar paquetes de Gentoo. Esto te permite cambiar en package.env el número de procesadores a usar, para decrementar el swapping y mejorar el tiempo de compilación"
 
 msgid "Developed by Mariano Muñoz 2017-{}"
 msgstr "Desarrollado por Mariano Muñoz 2017-{}"
@@ -61,11 +61,23 @@ msgstr "Analizar el registro"
 msgid "Generate log"
 msgstr "Generar el registro"
 
-msgid "Minimum megabytes swap amount to be logged. Default is 500MB"
-msgstr ""
+msgid "Clean log"
+msgstr "Limpiar el registro"
 
-msgid "Please add a int to the megabytes argument"
-msgstr "Por favor introduca un entero al argumento de megabytes"
+msgid "Seconds between medition. Default is 10"
+msgstr "Segundos entre mediciones. Por defecto es 10"
+
+msgid "Log cleaned"
+msgstr "Registro limpiado"
+
+msgid "Log already cleaned"
+msgstr "El registro ya ha sido limpiado"
+
+msgid "{datetime.now()} Ebuild hasn't been detected. Swap: {filesize.naturalsize(used)} (Variation: {filesize.naturalsize(diff)})"
+msgstr "{datetime.now()} Ebuild no ha sido detectado. Swap: {filesize.naturalsize(used)} (Variación: {filesize.naturalsize(diff)})"
 
 msgid "No swapping detected"
 msgstr "No se ha detectado swapping"
+
+#~ msgid "Please add a int to the megabytes argument"
+#~ msgstr "Por favor introduca un entero al argumento de megabytes"

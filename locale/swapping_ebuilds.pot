@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-21 19:20+0100\n"
+"POT-Creation-Date: 2021-05-02 06:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,14 +41,14 @@ msgstr ""
 msgid "You pressed 'Ctrl+C', exiting..."
 msgstr ""
 
-msgid "{} ({}) [{}] has {} reports ({} per hour) with {} of swap average"
+msgid "{} [{}] has {} reports with {} of swap variation and {} of swap average. They took {}"
 msgstr ""
 
 #, python-brace-format
 msgid "Problem parsing: {line}"
 msgstr ""
 
-msgid "This app logs in /var/lib/swapping_ebuilds.txt when compiling gentoo packages and swap is over an amount of MB. This allow you to change in package.env the number of processors used, to decrease swapping and improve ebuild time compilation"
+msgid "This app logs swap information in /var/lib/swapping_ebuilds.txt compiling Gentoo packages. This allow you to change in package.env the number of processors used, to decrease swapping and improve ebuild time compilation"
 msgstr ""
 
 msgid "Developed by Mariano Muñoz 2017-{}"
@@ -60,10 +60,19 @@ msgstr ""
 msgid "Generate log"
 msgstr ""
 
-msgid "Minimum megabytes swap amount to be logged. Default is 500MB"
+msgid "Clean log"
 msgstr ""
 
-msgid "Please add a int to the megabytes argument"
+msgid "Seconds between medition. Default is 10"
+msgstr ""
+
+msgid "Log cleaned"
+msgstr ""
+
+msgid "Log already cleaned"
+msgstr ""
+
+msgid "{datetime.now()} Ebuild hasn't been detected. Swap: {filesize.naturalsize(used)} (Variation: {filesize.naturalsize(diff)})"
 msgstr ""
 
 msgid "No swapping detected"

@@ -123,7 +123,7 @@ class Report:
 def main():
     signal(SIGINT, signal_handler)
 
-    description=_("This app logs swap information in /var/lib/swapping_ebuilds.txt compiling gentoo packages. This allow you to change in package.env the number of processors used, to decrease swapping and improve ebuild time compilation")
+    description=_("This app logs swap information in /var/lib/swapping_ebuilds.txt compiling Gentoo packages. This allow you to change in package.env the number of processors used, to decrease swapping and improve ebuild time compilation")
     epilog=_("Developed by Mariano Muñoz 2017-{}").format(__versiondate__.year)
     parser=argparse.ArgumentParser(description=description,epilog=epilog)
     parser.add_argument('--version',action='version', version=__version__)
@@ -141,7 +141,7 @@ def main():
             remove(filename)
             print(_("Log cleaned"))
         else:
-            print(_("Log already clenaned"))
+            print(_("Log already cleaned"))
         sys.exit(0)
 
     last_swap=swap_memory().used
