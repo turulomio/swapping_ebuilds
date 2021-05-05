@@ -9,6 +9,9 @@ from psutil import swap_memory, process_iter
 from signal import signal, SIGINT
 from time import sleep
 from swapping_ebuilds.__init__ import __version__, __versiondate__
+from colorama import Fore, init
+from math import floor, ceil
+from numpy import array, percentile
 
 try:
     t=translation('swapping_ebuilds', resource_filename("swapping_ebuilds","locale"))
@@ -53,7 +56,7 @@ class SetPackages:
         for p in self.arr:
             print (_("{} [{}] has {} reports with {} of swap variation average and {} of swap average. They took {}").format(p.datetime(), p.name(), int(p.num_reports()), filesize.naturalsize(int(p.average_diff())), filesize.naturalsize(int(p.average_swap())), p.duration()))
 
-class Package:
+class ReportManager:
     """
        Group of Reports
     """
@@ -87,11 +90,56 @@ class Package:
         """
         return self.arr[0].datetime
 
-    def name(self):
-        return self.arr[0].name
 
     def reports_per_hour(self):
         return self.num_reports()/self.duration().total_seconds()*60*60
+
+
+    def print(self):
+        print(f"{rep.datetime} {rep.name} {filesize.naturalsize(rep.swap)} {filesize.naturalsize(rep.diff)}")
+
+
+    def list_of_swap(self):
+        r=[]
+        for o in self.arr:
+            r.append(o.swap)
+        return r
+
+    def list_of_variations(self):
+        r=[]
+        for o in self.arr:
+            r.append(o.diff)
+        return r
+
+    def print(self):
+        limit_diff=int(percentile(array(self.list_of_variations()), args.percentile))
+        limit_swap=int(percentile(array(self.list_of_swap()), args.percentile))
+        print(f"Percentile {args.percentile}: Swap {filesize.naturalsize(limit_swap)}, Diff {filesize.naturalsize(limit_diff)}")
+        for rep in self.arr:
+            if abs(rep.diff)>abs(limit_diff) and rep.swap>limit_swap:
+                print(Fore.RED + f"{rep.datetime} {rep.name} {filesize.naturalsize(rep.swap)} {filesize.naturalsize(rep.diff)}" + Fore.RESET)
+            else:
+                print(f"{rep.datetime} {rep.name} {filesize.naturalsize(rep.swap)} {filesize.naturalsize(rep.diff)}")
+
+def ReportManager_from_file(filename):
+    rm=ReportManager()
+    if path.exists(filename):
+        for line in open(filename, "r").readlines():
+            rep=Report().init__from_line(line)
+            if rep is not None:
+                rm.arr.append(rep)
+    else:
+        print(_("There isn't log to list"))
+    return rm
+
+
+## Used for analyze to join by ebuild
+class Package(ReportManager):
+    def __init__(self):
+        ReportManager.__init__(self)
+
+    def name(self):
+        return self.arr[0].name
 
 class Report:
     def __init__(self):
@@ -121,6 +169,7 @@ class Report:
 ####################################################################################################
 
 def main():
+    init()
     signal(SIGINT, signal_handler)
 
     description=_("This app logs swap information in /var/lib/swapping_ebuilds.txt compiling Gentoo packages. This allow you to change in package.env the number of processors used, to decrease swapping and improve ebuild time compilation")
@@ -128,6 +177,7 @@ def main():
     parser=argparse.ArgumentParser(description=description,epilog=epilog)
     parser.add_argument('--version',action='version', version=__version__)
     parser.add_argument('--interval', help=_('Seconds between medition. Default is 10'), action='store', type=int, default=10, metavar="seconds")
+    parser.add_argument('--percentile', help=_('Percentile for list. Default is 75'), action='store', type=int, default=75, metavar="percentile")
 
     group1=parser.add_mutually_exclusive_group(required=True)
     group1.add_argument('--analyze', help=_('Analyze log'), action='store_true', default=False)
@@ -149,12 +199,8 @@ def main():
         sys.exit(0)
 
     if args.list:
-        if path.exists(filename):
-            for line in open(filename, "r").readlines():
-                rep=Report().init__from_line(line)
-                print(f"{rep.datetime} {rep.name} {filesize.naturalsize(rep.swap)} {filesize.naturalsize(rep.diff)}")
-        else:
-            print(_("There isn't log to list"))
+        rm=ReportManager_from_file(filename)
+        rm.print()
         sys.exit(0)
 
     last_swap=swap_memory().used
