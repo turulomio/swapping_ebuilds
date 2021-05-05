@@ -51,7 +51,7 @@ class SetPackages:
 
     def print(self):
         for p in self.arr:
-            print (_("{} [{}] has {} reports with {} of swap variation and {} of swap average. They took {}").format(p.datetime(), p.name(), int(p.num_reports()), filesize.naturalsize(int(p.average_diff())), filesize.naturalsize(int(p.average_swap())), p.duration()))
+            print (_("{} [{}] has {} reports with {} of swap variation average and {} of swap average. They took {}").format(p.datetime(), p.name(), int(p.num_reports()), filesize.naturalsize(int(p.average_diff())), filesize.naturalsize(int(p.average_swap())), p.duration()))
 
 class Package:
     """
@@ -78,7 +78,7 @@ class Package:
 
     def duration(self):
         if len(self.arr)==1:
-            return timedelta(seconds=60)
+            return timedelta(seconds=args.interval)
         return self.arr[len(self.arr)-1].datetime-self.arr[0].datetime
 
     def datetime(self):
@@ -127,11 +127,15 @@ def main():
     epilog=_("Developed by Mariano Muñoz 2017-{}").format(__versiondate__.year)
     parser=argparse.ArgumentParser(description=description,epilog=epilog)
     parser.add_argument('--version',action='version', version=__version__)
+    parser.add_argument('--interval', help=_('Seconds between medition. Default is 10'), action='store', type=int, default=10, metavar="seconds")
+
     group1=parser.add_mutually_exclusive_group(required=True)
     group1.add_argument('--analyze', help=_('Analyze log'), action='store_true', default=False)
     group1.add_argument('--get', help=_('Generate log'), action='store_true',default=False)
     group1.add_argument('--clean', help=_('Clean log'), action='store_true',default=False)
-    parser.add_argument('--interval', help=_('Seconds between medition. Default is 10'), action='store', type=int, default=10, metavar="seconds")
+    group1.add_argument('--list', help=_('List log'), action='store_true',default=False)
+
+    global args
     args=parser.parse_args()
 
     filename="/var/lib/swapping_ebuilds.txt"
@@ -142,6 +146,15 @@ def main():
             print(_("Log cleaned"))
         else:
             print(_("Log already cleaned"))
+        sys.exit(0)
+
+    if args.list:
+        if path.exists(filename):
+            for line in open(filename, "r").readlines():
+                rep=Report().init__from_line(line)
+                print(f"{rep.datetime} {rep.name} {filesize.naturalsize(rep.swap)} {filesize.naturalsize(rep.diff)}")
+        else:
+            print(_("There isn't log to list"))
         sys.exit(0)
 
     last_swap=swap_memory().used
