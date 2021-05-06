@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RecPermissions\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-05 05:59+0200\n"
+"POT-Creation-Date: 2021-05-06 08:32+0200\n"
 "PO-Revision-Date: 2018-10-22 18:51+0100\n"
 "Last-Translator: root <turulomio@yahoo.es>\n"
 "Language-Team: Spanish\n"
@@ -45,6 +45,9 @@ msgstr "Se ha pulsado 'Ctrl+C', saliendo..."
 msgid "{} [{}] has {} reports with {} of swap variation average and {} of swap average. They took {}"
 msgstr "{} [{}] tiene {} registros con {} de variación media de swap y {} de media de swap. Tardaron {}"
 
+msgid "There isn't log to list"
+msgstr "No hay registros para listar"
+
 #, python-brace-format
 msgid "Problem parsing: {line}"
 msgstr "Problema al parsear: {line}"
@@ -55,8 +58,17 @@ msgstr "Esta aplicación registra información de la swap en /var/lib/swapping_e
 msgid "Developed by Mariano Muñoz 2017-{}"
 msgstr "Desarrollado por Mariano Muñoz 2017-{}"
 
+msgid "Parameters"
+msgstr "Parámetros"
+
 msgid "Seconds between medition. Default is 10"
 msgstr "Segundos entre mediciones. Por defecto es 10"
+
+msgid "Minutes of positive swapping required to highlight ebuilds with --analyze. Default is 15"
+msgstr "Minutos requeridos de swapping positivo para resaltar ebuilds con --analyze. Por defecto es 15"
+
+msgid "Number of consecutive logs with positive swapping required to highlight with --list. Default is 3"
+msgstr "Número de registros consecutivos con swapping positivo para resaltar con --list. Por defecto es 3"
 
 msgid "Analyze log"
 msgstr "Analizar el registro"
@@ -68,7 +80,13 @@ msgid "Clean log"
 msgstr "Limpiar el registro"
 
 msgid "List log"
-msgstr ""
+msgstr "Listar registros"
+
+msgid "--hl_analyze must be positive"
+msgstr "--hl_analyze debe ser positivo"
+
+msgid "--hl_list must be greater than 1"
+msgstr "--hl_list debe ser mayor que 1"
 
 msgid "Log cleaned"
 msgstr "Registro limpiado"
@@ -82,5 +100,3 @@ msgstr "{datetime.now()} Ebuild no ha sido detectado. Swap: {filesize.naturalsiz
 msgid "No swapping detected"
 msgstr "No se ha detectado swapping"
 
-#~ msgid "Please add a int to the megabytes argument"
-#~ msgstr "Por favor introduca un entero al argumento de megabytes"

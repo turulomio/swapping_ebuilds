@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-05 05:59+0200\n"
+"POT-Creation-Date: 2021-05-06 08:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,6 +44,9 @@ msgstr ""
 msgid "{} [{}] has {} reports with {} of swap variation average and {} of swap average. They took {}"
 msgstr ""
 
+msgid "There isn't log to list"
+msgstr ""
+
 #, python-brace-format
 msgid "Problem parsing: {line}"
 msgstr ""
@@ -54,7 +57,16 @@ msgstr ""
 msgid "Developed by Mariano Muñoz 2017-{}"
 msgstr ""
 
+msgid "Parameters"
+msgstr ""
+
 msgid "Seconds between medition. Default is 10"
+msgstr ""
+
+msgid "Minutes of positive swapping required to highlight ebuilds with --analyze. Default is 15"
+msgstr ""
+
+msgid "Number of consecutive logs with positive swapping required to highlight with --list. Default is 3"
 msgstr ""
 
 msgid "Analyze log"
@@ -67,6 +79,12 @@ msgid "Clean log"
 msgstr ""
 
 msgid "List log"
+msgstr ""
+
+msgid "--hl_analyze must be positive"
+msgstr ""
+
+msgid "--hl_list must be greater than 1"
 msgstr ""
 
 msgid "Log cleaned"

@@ -40,7 +40,7 @@ class Procedure(Command):
 
     def run(self):
         print(_("New Release:"))
-        print(_("  * Change version and date in version.py"))
+        print(_("  * Change version and date in __init__.py"))
         print(_("  * Edit Changelog in README"))
         print("  * python setup.py doc")
         print("  * mcedit locale/es.po")

@@ -33,10 +33,16 @@ You can find the ebuild in https://github.com/turulomio/myportage/tree/master/ap
 ## Dependencies
 
 * https://www.python.org/, as the main programming language.
+* https://github.com/tartley/colorama
 * https://github.com/jmoiron/humanize
 * https://github.com/giampaolo/psutil
 
 ## Changelog
+
+### 0.5.0 (2021-05-06)
+
+* Added --list argument to list registers
+* Added highlighted ouput with colorama
 
 ### 0.4.0 (2021-05-02)
 
