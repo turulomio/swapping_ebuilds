@@ -1,7 +1,7 @@
 import argparse
 import sys
 from os import path, remove
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 from gettext import translation
 from humanize import filesize
 from pkg_resources import resource_filename
@@ -10,8 +10,6 @@ from signal import signal, SIGINT
 from time import sleep
 from swapping_ebuilds.__init__ import __version__, __versiondate__
 from colorama import Fore, init
-from math import floor, ceil
-from numpy import array, percentile
 
 try:
     t=translation('swapping_ebuilds', resource_filename("swapping_ebuilds","locale"))
@@ -23,18 +21,17 @@ def signal_handler(signal, frame):
     print(_("You pressed 'Ctrl+C', exiting..."))
     exit(1)
 
-class SetPackages:
+class PackageManager:
     def __init__(self):
         self.arr=[]
         self.read_file()
 
     def read_file(self):
         f=open("/var/lib/swapping_ebuilds.txt","r")
-        last=None
         reports=[]
         for line in f.readlines():
             rep=Report().init__from_line(line)
-            if rep!=None:
+            if rep is not None:
                 reports.append(rep)
 
         if len(reports)==0:
@@ -51,10 +48,14 @@ class SetPackages:
                  package.arr.append(r)
             last_report=r
         self.arr.append(package)
-
+        
     def print(self):
         for p in self.arr:
-            print (_("{} [{}] has {} reports with {} of swap variation average and {} of swap average. They took {}").format(p.datetime(), p.name(), int(p.num_reports()), filesize.naturalsize(int(p.average_diff())), filesize.naturalsize(int(p.average_swap())), p.duration()))
+            if  p.number_of_reports_with_positive_swapping()*args.interval>args.hl_analyze*60:
+                print (Fore.RED + _("{} [{}] has {} reports with {} of swap variation average and {} of swap average. They took {}").format(p.datetime(), p.name(), int(p.length()), filesize.naturalsize(int(p.average_diff())), filesize.naturalsize(int(p.average_swap())), p.duration())+ Fore.RESET)
+            else:
+                print ( _("{} [{}] has {} reports with {} of swap variation average and {} of swap average. They took {}").format(p.datetime(), p.name(), int(p.length()), filesize.naturalsize(int(p.average_diff())), filesize.naturalsize(int(p.average_swap())), p.duration()))
+
 
 class ReportManager:
     """
@@ -67,17 +68,24 @@ class ReportManager:
         sum=0
         for r in self.arr:
             sum=sum+r.swap
-        return sum/self.num_reports()
+        return sum/self.length()
 
     # Variation in abs value
     def average_diff(self):
         sum=0
         for r in self.arr:
             sum=sum+abs(r.diff)
-        return sum/self.num_reports()
+        return sum/self.length()
 
-    def num_reports(self):
+    def length(self):
         return len(self.arr)
+        
+    def number_of_reports_with_positive_swapping(self):
+        n=0
+        for r in self.arr:
+            if r.isPositiveSwapping():
+                n=n+1
+        return n
 
     def duration(self):
         if len(self.arr)==1:
@@ -90,14 +98,8 @@ class ReportManager:
         """
         return self.arr[0].datetime
 
-
     def reports_per_hour(self):
-        return self.num_reports()/self.duration().total_seconds()*60*60
-
-
-    def print(self):
-        print(f"{rep.datetime} {rep.name} {filesize.naturalsize(rep.swap)} {filesize.naturalsize(rep.diff)}")
-
+        return self.length()/self.duration().total_seconds()*60*60
 
     def list_of_swap(self):
         r=[]
@@ -110,13 +112,23 @@ class ReportManager:
         for o in self.arr:
             r.append(o.diff)
         return r
+        
+    ## Returns if the num last reposrts are swapping
+    def are_last_reports_positive_swapping(self, arr_position):
+        for i in range(arr_position-args.hl_list+1,  arr_position+1):
+            if self.arr[i].isPositiveSwapping()==False:
+                return False
+        return True
+        
+    ## Returns if the last reports are consecutive
+    def are_last_reports_consecutive(self, arr_position):
+        if (self.arr[arr_position].datetime-self.arr[arr_position-args.hl_list+1].datetime).total_seconds()<args.hl_list*(args.interval+1):
+            return True
+        return False
 
     def print(self):
-        limit_diff=int(percentile(array(self.list_of_variations()), args.percentile))
-        limit_swap=int(percentile(array(self.list_of_swap()), args.percentile))
-        print(f"Percentile {args.percentile}: Swap {filesize.naturalsize(limit_swap)}, Diff {filesize.naturalsize(limit_diff)}")
-        for rep in self.arr:
-            if abs(rep.diff)>abs(limit_diff) and rep.swap>limit_swap:
+        for i,  rep in enumerate(self.arr):
+            if i>=args.hl_list-1 and self.are_last_reports_positive_swapping(i) and self.are_last_reports_consecutive(i):
                 print(Fore.RED + f"{rep.datetime} {rep.name} {filesize.naturalsize(rep.swap)} {filesize.naturalsize(rep.diff)}" + Fore.RESET)
             else:
                 print(f"{rep.datetime} {rep.name} {filesize.naturalsize(rep.swap)} {filesize.naturalsize(rep.diff)}")
@@ -132,7 +144,6 @@ def ReportManager_from_file(filename):
         print(_("There isn't log to list"))
     return rm
 
-
 ## Used for analyze to join by ebuild
 class Package(ReportManager):
     def __init__(self):
@@ -147,6 +158,16 @@ class Report:
         self.name=None
         self.swap=0
         self.diff=0
+        
+    def isSwapping(self):
+        if self.diff!=0:
+            return True
+        return False
+
+    def isPositiveSwapping(self):
+        if self.isSwapping() and self.diff>0:
+            return True
+        return False
 
     def init__from_line(self,line):
         try:
@@ -176,8 +197,11 @@ def main():
     epilog=_("Developed by Mariano Muñoz 2017-{}").format(__versiondate__.year)
     parser=argparse.ArgumentParser(description=description,epilog=epilog)
     parser.add_argument('--version',action='version', version=__version__)
-    parser.add_argument('--interval', help=_('Seconds between medition. Default is 10'), action='store', type=int, default=10, metavar="seconds")
-    parser.add_argument('--percentile', help=_('Percentile for list. Default is 75'), action='store', type=int, default=75, metavar="percentile")
+    
+    group=parser.add_argument_group(_("Parameters"))
+    group.add_argument('--interval', help=_('Seconds between medition. Default is 10'), action='store', type=int, default=10, metavar="s")
+    group.add_argument('--hl_analyze', help=_('Minutes of positive swapping required to highlight ebuilds with --analyze. Default is 15'), action='store', type=int, default=15, metavar="m")
+    group.add_argument('--hl_list', help=_('Number of consecutive logs with positive swapping required to highlight ebuilds with --list. Default is 3'), action='store', type=int, default=3, metavar="s")
 
     group1=parser.add_mutually_exclusive_group(required=True)
     group1.add_argument('--analyze', help=_('Analyze log'), action='store_true', default=False)
@@ -189,6 +213,14 @@ def main():
     args=parser.parse_args()
 
     filename="/var/lib/swapping_ebuilds.txt"
+
+    if args.hl_analyze<0:
+        print (_("--hl_analyze must be positive"))
+        sys.exit(1)
+        
+    if args.hl_list<1:
+        print (_("--hl_list must be greater than 1"))
+        sys.exit(1)
 
     if args.clean:
         if path.exists(filename):
@@ -203,8 +235,8 @@ def main():
         rm.print()
         sys.exit(0)
 
-    last_swap=swap_memory().used
     if args.get:
+        last_swap=swap_memory().used
         while True:
             package=""
             try:
@@ -235,6 +267,6 @@ def main():
         if path.exists(filename)==False:
             print(_("No swapping detected"))
             sys.exit(0)
-        set=SetPackages()
+        set=PackageManager()
         set.print()
         sys.exit(0)
