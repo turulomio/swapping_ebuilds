@@ -1,5 +1,10 @@
 # Swapping ebuilds
 
+## Links
+
+* http://turulomio.users.sourceforge.net/doxygen/swapping_ebuilds/
+* https://github.com/turulomio/swapping_ebuilds
+
 ## What is swapping_ebuilds
 
 It's a script to detect swapping compiling ebuilds in Gentoo. With this tool you can detect swapping in computers with small RAM to try to improve its compilation time.
@@ -38,6 +43,11 @@ You can find the ebuild in https://github.com/turulomio/myportage/tree/master/ap
 * https://github.com/giampaolo/psutil
 
 ## Changelog
+
+### 0.6.0 (2021-05-07)
+
+* Remove positive swapping concept. Swapping is Swapping.
+* Added --hl_oly to show only highlighted records
 
 ### 0.5.0 (2021-05-06)
 

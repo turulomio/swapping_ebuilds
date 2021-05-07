@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RecPermissions\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-06 08:35+0200\n"
+"POT-Creation-Date: 2021-05-07 04:42+0200\n"
 "PO-Revision-Date: 2018-11-03 07:11+0100\n"
 "Last-Translator: root <turulomio@yahoo.es>\n"
 "Language-Team: French\n"
@@ -20,8 +20,8 @@ msgstr ""
 msgid "New Release:"
 msgstr "Nouvelle sortie :"
 
-msgid "  * Change version and date in version.py"
-msgstr " * Changer la version et la date dans version.py"
+msgid "  * Change version and date in __init__.py"
+msgstr ""
 
 msgid "  * Edit Changelog in README"
 msgstr " * Editer le Changelog dans le README"
@@ -63,10 +63,13 @@ msgstr ""
 msgid "Seconds between medition. Default is 10"
 msgstr ""
 
-msgid "Minutes of positive swapping required to highlight ebuilds with --analyze. Default is 15"
+msgid "Minutes of swapping required to highlight ebuilds with --analyze. Default is 15"
 msgstr ""
 
-msgid "Number of consecutive logs with positive swapping required to highlight with --list. Default is 3"
+msgid "Number of consecutive logs with swapping required to highlight with --list. Default is 3"
+msgstr ""
+
+msgid "Shows in --list and --analyze only highlighted records"
 msgstr ""
 
 msgid "Analyze log"
@@ -98,6 +101,9 @@ msgstr ""
 
 msgid "No swapping detected"
 msgstr ""
+
+#~ msgid "  * Change version and date in version.py"
+#~ msgstr " * Changer la version et la date dans version.py"
 
 #~ msgid "DESCRIPTION"
 #~ msgstr "LA DESCRIPTION"
