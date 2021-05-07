@@ -51,7 +51,7 @@ class PackageManager:
         
     def print(self):
         for p in self.arr:
-            if  p.number_of_reports_with_positive_swapping()*args.interval>args.hl_analyze*60:
+            if  p.number_of_reports_with_swapping()*args.interval>args.hl_analyze*60:
                 print (Fore.RED + _("{} [{}] has {} reports with {} of swap variation average and {} of swap average. They took {}").format(p.datetime(), p.name(), int(p.length()), filesize.naturalsize(int(p.average_diff())), filesize.naturalsize(int(p.average_swap())), p.duration())+ Fore.RESET)
             else:
                 print ( _("{} [{}] has {} reports with {} of swap variation average and {} of swap average. They took {}").format(p.datetime(), p.name(), int(p.length()), filesize.naturalsize(int(p.average_diff())), filesize.naturalsize(int(p.average_swap())), p.duration()))
@@ -80,10 +80,10 @@ class ReportManager:
     def length(self):
         return len(self.arr)
         
-    def number_of_reports_with_positive_swapping(self):
+    def number_of_reports_with_swapping(self):
         n=0
         for r in self.arr:
-            if r.isPositiveSwapping():
+            if r.isSwapping():
                 n=n+1
         return n
 
@@ -114,9 +114,9 @@ class ReportManager:
         return r
         
     ## Returns if the num last reposrts are swapping
-    def are_last_reports_positive_swapping(self, arr_position):
+    def are_last_reports_swapping(self, arr_position):
         for i in range(arr_position-args.hl_list+1,  arr_position+1):
-            if self.arr[i].isPositiveSwapping()==False:
+            if self.arr[i].isSwapping()==False:
                 return False
         return True
         
@@ -128,7 +128,7 @@ class ReportManager:
 
     def print(self):
         for i,  rep in enumerate(self.arr):
-            if i>=args.hl_list-1 and self.are_last_reports_positive_swapping(i) and self.are_last_reports_consecutive(i):
+            if i>=args.hl_list-1 and self.are_last_reports_swapping(i) and self.are_last_reports_consecutive(i):
                 print(Fore.RED + f"{rep.datetime} {rep.name} {filesize.naturalsize(rep.swap)} {filesize.naturalsize(rep.diff)}" + Fore.RESET)
             else:
                 print(f"{rep.datetime} {rep.name} {filesize.naturalsize(rep.swap)} {filesize.naturalsize(rep.diff)}")
@@ -158,14 +158,9 @@ class Report:
         self.name=None
         self.swap=0
         self.diff=0
-        
+
     def isSwapping(self):
         if self.diff!=0:
-            return True
-        return False
-
-    def isPositiveSwapping(self):
-        if self.isSwapping() and self.diff>0:
             return True
         return False
 
@@ -200,8 +195,8 @@ def main():
     
     group=parser.add_argument_group(_("Parameters"))
     group.add_argument('--interval', help=_('Seconds between medition. Default is 10'), action='store', type=int, default=10, metavar="s")
-    group.add_argument('--hl_analyze', help=_('Minutes of positive swapping required to highlight ebuilds with --analyze. Default is 15'), action='store', type=int, default=15, metavar="m")
-    group.add_argument('--hl_list', help=_('Number of consecutive logs with positive swapping required to highlight with --list. Default is 3'), action='store', type=int, default=3, metavar="s")
+    group.add_argument('--hl_analyze', help=_('Minutes of swapping required to highlight ebuilds with --analyze. Default is 15'), action='store', type=int, default=15, metavar="m")
+    group.add_argument('--hl_list', help=_('Number of consecutive logs with swapping required to highlight with --list. Default is 3'), action='store', type=int, default=3, metavar="s")
 
     group1=parser.add_mutually_exclusive_group(required=True)
     group1.add_argument('--analyze', help=_('Analyze log'), action='store_true', default=False)
