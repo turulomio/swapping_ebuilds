@@ -54,7 +54,8 @@ class PackageManager:
             if  p.number_of_reports_with_swapping()*args.interval>args.hl_analyze*60:
                 print (Fore.RED + _("{} [{}] has {} reports with {} of swap variation average and {} of swap average. They took {}").format(p.datetime(), p.name(), int(p.length()), filesize.naturalsize(int(p.average_diff())), filesize.naturalsize(int(p.average_swap())), p.duration())+ Fore.RESET)
             else:
-                print ( _("{} [{}] has {} reports with {} of swap variation average and {} of swap average. They took {}").format(p.datetime(), p.name(), int(p.length()), filesize.naturalsize(int(p.average_diff())), filesize.naturalsize(int(p.average_swap())), p.duration()))
+                if args.hl_only==False:
+                    print ( _("{} [{}] has {} reports with {} of swap variation average and {} of swap average. They took {}").format(p.datetime(), p.name(), int(p.length()), filesize.naturalsize(int(p.average_diff())), filesize.naturalsize(int(p.average_swap())), p.duration()))
 
 
 class ReportManager:
@@ -131,7 +132,8 @@ class ReportManager:
             if i>=args.hl_list-1 and self.are_last_reports_swapping(i) and self.are_last_reports_consecutive(i):
                 print(Fore.RED + f"{rep.datetime} {rep.name} {filesize.naturalsize(rep.swap)} {filesize.naturalsize(rep.diff)}" + Fore.RESET)
             else:
-                print(f"{rep.datetime} {rep.name} {filesize.naturalsize(rep.swap)} {filesize.naturalsize(rep.diff)}")
+                if args.hl_only==False:
+                    print(f"{rep.datetime} {rep.name} {filesize.naturalsize(rep.swap)} {filesize.naturalsize(rep.diff)}")
 
 def ReportManager_from_file(filename):
     rm=ReportManager()
@@ -197,6 +199,7 @@ def main():
     group.add_argument('--interval', help=_('Seconds between medition. Default is 10'), action='store', type=int, default=10, metavar="s")
     group.add_argument('--hl_analyze', help=_('Minutes of swapping required to highlight ebuilds with --analyze. Default is 15'), action='store', type=int, default=15, metavar="m")
     group.add_argument('--hl_list', help=_('Number of consecutive logs with swapping required to highlight with --list. Default is 3'), action='store', type=int, default=3, metavar="s")
+    group.add_argument('--hl_only', help=_('Shows in --list and --analyze only highlighted records'), action='store_true', default=False)
 
     group1=parser.add_mutually_exclusive_group(required=True)
     group1.add_argument('--analyze', help=_('Analyze log'), action='store_true', default=False)
