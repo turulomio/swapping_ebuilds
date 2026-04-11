@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "swapping_ebuilds"
+version = "0.6.0"
+description = "Script to detect swapping compiling ebuilds in Gentoo"
+readme = "README.md"
+license = { text = "GPL-3.0-only" }
+authors = [
+    { name = "turulomio", email = "turulomio@yahoo.es" }
+]
+keywords = ["swap", "ebuild", "gentoo", "portage"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: System Administrators",
+    "Topic :: System :: Systems Administration",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: 3",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "humanize",
+    "psutil",
+    "colorama",
+]
+
+[project.urls]
+Homepage = "https://github.com/turulomio/swapping_ebuilds"
+
+[project.scripts]
+swapping_ebuilds = "swapping_ebuilds.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["swapping_ebuilds"]
+artifacts = [
+    "swapping_ebuilds/locale/**/*.mo",
+]

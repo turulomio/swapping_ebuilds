@@ -5,13 +5,13 @@
 * http://turulomio.users.sourceforge.net/doxygen/swapping_ebuilds/
 * https://github.com/turulomio/swapping_ebuilds
 
-## What is swapping_ebuilds
+## What is swapping_ebuilds?
 
-It's a script to detect swapping compiling ebuilds in Gentoo. With this tool you can detect swapping in computers with small RAM to try to improve its compilation time.
+It is a script designed to detect when compiling ebuilds in Gentoo Linux causes system swapping. With this tool, you can identify memory-hungry compilations on computers with limited RAM and optimize their compilation times.
 
-Once you detect swapping ebuilds you can change this behaviour using, you can use /etc/portage/package.env to change the number of paralell process in compilation to reduce the needed RAM.
+Once you detect swapping ebuilds, you can change this behavior by using `/etc/portage/package.env` to reduce the number of parallel processes during compilation, which lowers the required RAM.
 
-For example if your MAKEOPTS in /etc/portage/make.conf uses -j4, and dev-qt/qtwebengine compilation is swapping, you can force to use only -j2 with this particular ebuild,  creating a file in `/etc/portage/env/makeopts-j2`
+For example, if your `MAKEOPTS` in `/etc/portage/make.conf` uses `-j4`, and `dev-qt/qtwebengine` compilation is swapping, you can force it to use only `-j2` for this particular ebuild. First, create a file at `/etc/portage/env/makeopts-j2`:
 
 ```bash
 MAKEOPTS="-j2"
@@ -27,8 +27,8 @@ Next time you compile dev-qt/qtwebengine, Gentoo will use only 2 concurrent proc
 ## Usage
 
 ```bash
-swapping_ebuilds --get # To detect swapping
-swapping_ebuilds --analyze # To see a swapping report
+swapping_ebuilds --get      # Run in the background to detect and log swapping
+swapping_ebuilds --analyze  # Read the logs and view a swapping report
 ```
 
 ## Linux installation
