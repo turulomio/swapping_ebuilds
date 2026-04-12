@@ -4,7 +4,7 @@ from swapping_ebuilds import __version__
 
 print("New Release:")
 print("  * Create an issue in Github and create associated branch")
-print("  * Change version and date in __init__.py")
+print("  * Change version datetime in version.py and version in pyproject.toml")
 print("  * uv run -s scripts/release.py")
 print("  * Edit Changelog in README")
 print("  * uv run -s scripts/translate.py")
