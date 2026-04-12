@@ -2,8 +2,8 @@
 
 ## Links
 
-* http://turulomio.users.sourceforge.net/doxygen/swapping_ebuilds/
-* https://github.com/turulomio/swapping_ebuilds
+* https://github.com/turulomio/swapping_ebuilds/
+* https://pypi.org/project/swapping_ebuilds/
 
 ## What is swapping_ebuilds?
 
