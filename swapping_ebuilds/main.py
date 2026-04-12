@@ -4,7 +4,7 @@ from os import path, remove
 from datetime import datetime, timedelta
 from gettext import translation
 from humanize import filesize
-from pkg_resources import resource_filename
+from importlib.resources import files
 from psutil import swap_memory, process_iter
 from signal import signal, SIGINT
 from time import sleep
@@ -12,7 +12,7 @@ from swapping_ebuilds.__init__ import __version__, __versiondate__
 from colorama import Fore, init
 
 try:
-    t=translation('swapping_ebuilds', resource_filename("swapping_ebuilds","locale"))
+    t=translation('swapping_ebuilds', files("swapping_ebuilds") / "locale")
     _=t.gettext
 except:
     _=str
