@@ -6,5 +6,5 @@ try:
 except importlib.metadata.PackageNotFoundError:
     __version__ = 'NotFound'
 
-__versiondatetime__ = datetime(2021, 5, 7, 18, 38)
+__versiondatetime__ = datetime(2026, 4, 12, 8, 38)
 __versiondate__ = __versiondatetime__.date()

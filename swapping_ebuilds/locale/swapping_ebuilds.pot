@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 21:45+0200\n"
+"POT-Creation-Date: 2026-04-12 08:37+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,10 +32,10 @@ msgstr ""
 msgid "Developed by Mariano Muñoz 2017-{}"
 msgstr ""
 
-msgid "Parameters"
+msgid "Optional Parameters"
 msgstr ""
 
-msgid "Seconds between medition. Default is 10"
+msgid "Seconds between measurements. Default is 10"
 msgstr ""
 
 msgid "Minutes of swapping required to highlight ebuilds with --analyze. Default is 15"
@@ -65,10 +65,16 @@ msgstr ""
 msgid "--hl_list must be greater than 1"
 msgstr ""
 
+msgid "Attempting to clean log file..."
+msgstr ""
+
 msgid "Log cleaned"
 msgstr ""
 
 msgid "Log already cleaned"
+msgstr ""
+
+msgid "Listing log entries:"
 msgstr ""
 
 msgid "No swapping detected"

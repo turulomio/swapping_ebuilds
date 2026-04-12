@@ -1,15 +1,15 @@
-# Spanish translations for PACKAGE package
-# Traducciones al español para el paquete PACKAGE.
-# Copyright (C) 2018 THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Spanish translations for swapping_ebuilds package
+# Traducciones al español para el paquete swapping_ebuilds.
+# Copyright (C) 2024 turulomio
+# This file is distributed under the same license as the swapping_ebuilds package.
 # root <turulomio@yahoo.es>, 2018.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: RecPermissions\n"
+"Project-Id-Version: swapping_ebuilds\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-11 21:44+0200\n"
-"PO-Revision-Date: 2018-10-22 18:51+0100\n"
+"POT-Creation-Date: 2024-05-15 10:00+0000\n"
+"PO-Revision-Date: 2024-05-15 10:00+0000\n"
 "Last-Translator: root <turulomio@yahoo.es>\n"
 "Language-Team: Spanish\n"
 "Language: es\n"
@@ -33,11 +33,11 @@ msgstr "Esta aplicación registra información de la swap en /var/lib/swapping_e
 msgid "Developed by Mariano Muñoz 2017-{}"
 msgstr "Desarrollado por Mariano Muñoz 2017-{}"
 
-msgid "Parameters"
-msgstr "Parámetros"
+msgid "Optional Parameters"
+msgstr "Parámetros Opcionales"
 
-msgid "Seconds between medition. Default is 10"
-msgstr "Segundos entre mediciones. Por defecto es 10"
+msgid "Seconds between measurements. Default is 10"
+msgstr "Segundos entre mediciones. El valor predeterminado es 10"
 
 msgid "Minutes of swapping required to highlight ebuilds with --analyze. Default is 15"
 msgstr "Minutos de swapping requeridos para resaltar ebuilds con --analyze. Por defecto es 15"
@@ -66,39 +66,17 @@ msgstr "--hl_analyze debe ser positivo"
 msgid "--hl_list must be greater than 1"
 msgstr "--hl_list debe ser mayor que 1"
 
+msgid "Attempting to clean log file..."
+msgstr "Intentando limpiar el archivo de registro..."
+
 msgid "Log cleaned"
 msgstr "Registro limpiado"
 
 msgid "Log already cleaned"
 msgstr "El registro ya ha sido limpiado"
 
+msgid "Listing log entries:"
+msgstr "Listando entradas del registro:"
+
 msgid "No swapping detected"
 msgstr "No se ha detectado swapping"
-
-#~ msgid "New Release:"
-#~ msgstr "Nueva versión:"
-
-#~ msgid "  * Change version and date in __init__.py"
-#~ msgstr "  * Cambiar versión y fecha en __init__.py"
-
-#~ msgid "  * Edit Changelog in README"
-#~ msgstr "  * Modificar el Changelog en README"
-
-#~ msgid "  * Make a new tag in github"
-#~ msgstr "  * Hacer un nuevo tag en GitHub"
-
-#~ msgid "  * Create a new gentoo ebuild with the new version"
-#~ msgstr "  * Crea un nuevo ebuild de Gentoo con la nueva versión"
-
-#~ msgid "  * Upload to portage repository"
-#~ msgstr "  * Subelo al repositorio del portage"
-
-#~ msgid "Uninstall command only works in Linux"
-#~ msgstr "El comando 'uninstall' solo funciona en Linux"
-
-#, python-brace-format
-#~ msgid "Problem parsing: {line}"
-#~ msgstr "Problema al parsear: {line}"
-
-#~ msgid "{datetime.now()} Ebuild hasn't been detected. Swap: {filesize.naturalsize(used)} (Variation: {filesize.naturalsize(diff)})"
-#~ msgstr "{datetime.now()} Ebuild no ha sido detectado. Swap: {filesize.naturalsize(used)} (Variación: {filesize.naturalsize(diff)})"

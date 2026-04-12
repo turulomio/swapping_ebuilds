@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "swapping_ebuilds"
-version = "0.6.0"
+version = "1.0.0"
 description = "Script to detect swapping compiling ebuilds in Gentoo"
 readme = "README.md"
 license = { text = "GPL-3.0-only" }
